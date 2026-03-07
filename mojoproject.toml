@@ -1,0 +1,11 @@
+[package]
+name = "url"
+version = "1.0.0"
+description = "Pure-Mojo URL parser (RFC 3986)"
+license = "MIT"
+platforms = ["linux-64", "osx-arm64"]
+
+[mojo]
+requires = ">=0.26.1"
+
+[dependencies]

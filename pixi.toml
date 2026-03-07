@@ -1,0 +1,12 @@
+[workspace]
+channels = ["https://conda.modular.com/max-nightly", "conda-forge"]
+name = "url"
+platforms = ["linux-64"]
+version = "0.1.0"
+
+[tasks]
+test-url = "mojo run test_url.mojo"
+format = "mblack url.mojo test_url.mojo"
+
+[dependencies]
+mojo = ">=0.26.1"
