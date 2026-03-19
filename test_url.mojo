@@ -189,6 +189,45 @@ fn test_host_with_space_rejected() raises:
 
 
 # ============================================================================
+# WebSocket Scheme Tests
+# ============================================================================
+
+
+fn test_ws_scheme() raises:
+    """WebSocket ws:// should parse with port 80 default."""
+    var url = parse_url("ws://echo.example.com/ws")
+    assert_str_eq(url.scheme, "ws", "scheme")
+    assert_str_eq(url.host, "echo.example.com", "host")
+    assert_int_eq(url.port, 80, "port")
+    assert_str_eq(url.path, "/ws", "path")
+
+
+fn test_wss_scheme() raises:
+    """Secure WebSocket wss:// should parse with port 443 default."""
+    var url = parse_url("wss://echo.example.com/ws")
+    assert_str_eq(url.scheme, "wss", "scheme")
+    assert_str_eq(url.host, "echo.example.com", "host")
+    assert_int_eq(url.port, 443, "port")
+    assert_str_eq(url.path, "/ws", "path")
+
+
+fn test_ws_custom_port() raises:
+    """WebSocket ws:// with custom port."""
+    var url = parse_url("ws://localhost:8080/chat")
+    assert_str_eq(url.scheme, "ws", "scheme")
+    assert_str_eq(url.host, "localhost", "host")
+    assert_int_eq(url.port, 8080, "port")
+    assert_str_eq(url.path, "/chat", "path")
+    assert_str_eq(url.host_header(), "localhost:8080", "host_header")
+
+
+fn test_wss_standard_port_host_header() raises:
+    """Secure WebSocket on port 443 should not include port in host header."""
+    var url = parse_url("wss://echo.example.com/ws")
+    assert_str_eq(url.host_header(), "echo.example.com", "host_header")
+
+
+# ============================================================================
 # Test Runner
 # ============================================================================
 
@@ -254,6 +293,17 @@ fn main() raises:
     )
     run_test(
         "host with space rejected", passed, failed, test_host_with_space_rejected
+    )
+
+    # WebSocket scheme tests
+    run_test("ws scheme", passed, failed, test_ws_scheme)
+    run_test("wss scheme", passed, failed, test_wss_scheme)
+    run_test("ws custom port", passed, failed, test_ws_custom_port)
+    run_test(
+        "wss standard port host header",
+        passed,
+        failed,
+        test_wss_standard_port_host_header,
     )
 
     print()
