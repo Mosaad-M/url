@@ -9,4 +9,4 @@ test-url = "mojo run test_url.mojo"
 format = "mblack url.mojo test_url.mojo"
 
 [dependencies]
-mojo = ">=0.26.1"
+mojo = ">=0.26.2"
