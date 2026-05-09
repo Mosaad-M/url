@@ -40,7 +40,7 @@ struct Url(Copyable, Movable):
         self.query = copy.query
         self.raw = copy.raw
 
-    def __init__(out self, *, take: Self):
+    def __init__(out self, *, deinit take: Self):
         self.scheme = take.scheme^
         self.host = take.host^
         self.port = take.port
