@@ -232,78 +232,67 @@ fn test_wss_standard_port_host_header() raises:
 # ============================================================================
 
 
+def run_test[test_fn: fn () raises -> None](
+    name: String, mut passed: Int, mut failed: Int
+):
+    try:
+        test_fn()
+        print("  PASS:", name)
+        passed += 1
+    except e:
+        print("  FAIL:", name, "-", String(e))
+        failed += 1
+
+
 def main() raises:
     var passed = 0
     var failed = 0
 
-    def run_test(
-        name: String,
-        mut passed: Int,
-        mut failed: Int,
-        test_fn: fn () raises -> None,
-    ):
-        try:
-            test_fn()
-            print("  PASS:", name)
-            passed += 1
-        except e:
-            print("  FAIL:", name, "-", String(e))
-            failed += 1
-
     print("=== URL Parser Tests ===")
     print()
 
-    run_test("simple http", passed, failed, test_simple_http)
-    run_test("http with path", passed, failed, test_http_with_path)
-    run_test("http with query", passed, failed, test_http_with_query)
-    run_test("custom port", passed, failed, test_custom_port)
-    run_test("https default port", passed, failed, test_https_default_port)
-    run_test("https custom port", passed, failed, test_https_custom_port)
-    run_test("trailing slash", passed, failed, test_trailing_slash)
-    run_test("query no path", passed, failed, test_query_no_path)
-    run_test(
-        "host header standard port",
-        passed,
-        failed,
-        test_host_header_standard_port,
+    run_test[test_simple_http]("simple http", passed, failed)
+    run_test[test_http_with_path]("http with path", passed, failed)
+    run_test[test_http_with_query]("http with query", passed, failed)
+    run_test[test_custom_port]("custom port", passed, failed)
+    run_test[test_https_default_port]("https default port", passed, failed)
+    run_test[test_https_custom_port]("https custom port", passed, failed)
+    run_test[test_trailing_slash]("trailing slash", passed, failed)
+    run_test[test_query_no_path]("query no path", passed, failed)
+    run_test[test_host_header_standard_port](
+        "host header standard port", passed, failed
     )
-    run_test(
-        "host header custom port", passed, failed, test_host_header_custom_port
+    run_test[test_host_header_custom_port](
+        "host header custom port", passed, failed
     )
-    run_test("raw preserved", passed, failed, test_raw_preserved)
-    run_test(
-        "missing scheme raises", passed, failed, test_missing_scheme_raises
+    run_test[test_raw_preserved]("raw preserved", passed, failed)
+    run_test[test_missing_scheme_raises](
+        "missing scheme raises", passed, failed
     )
-    run_test(
-        "unsupported scheme raises",
-        passed,
-        failed,
-        test_unsupported_scheme_raises,
+    run_test[test_unsupported_scheme_raises](
+        "unsupported scheme raises", passed, failed
     )
-    run_test("deep path", passed, failed, test_deep_path)
-    run_test("ip host", passed, failed, test_ip_host)
+    run_test[test_deep_path]("deep path", passed, failed)
+    run_test[test_ip_host]("ip host", passed, failed)
 
     # Security validation tests
-    run_test("port 0 rejected", passed, failed, test_port_zero_rejected)
-    run_test(
-        "port too large rejected", passed, failed, test_port_too_large_rejected
+    run_test[test_port_zero_rejected]("port 0 rejected", passed, failed)
+    run_test[test_port_too_large_rejected](
+        "port too large rejected", passed, failed
     )
-    run_test(
-        "port overflow rejected", passed, failed, test_port_overflow_rejected
+    run_test[test_port_overflow_rejected](
+        "port overflow rejected", passed, failed
     )
-    run_test(
-        "host with space rejected", passed, failed, test_host_with_space_rejected
+    run_test[test_host_with_space_rejected](
+        "host with space rejected", passed, failed
     )
 
     # WebSocket scheme tests
-    run_test("ws scheme", passed, failed, test_ws_scheme)
-    run_test("wss scheme", passed, failed, test_wss_scheme)
-    run_test("ws custom port", passed, failed, test_ws_custom_port)
-    run_test(
-        "wss standard port host header",
-        passed,
-        failed,
-        test_wss_standard_port_host_header,
+    run_test[test_ws_scheme]("ws scheme", passed, failed)
+    run_test[test_wss_scheme]("wss scheme", passed, failed)
+    run_test[test_ws_custom_port]("ws custom port", passed, failed)
+    run_test[test_wss_standard_port_host_header](
+        "wss standard port host header", passed, failed
     )
 
     print()
