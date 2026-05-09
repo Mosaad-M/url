@@ -29,7 +29,7 @@ def assert_int_eq(actual: Int, expected: Int, label: String) raises:
 # ============================================================================
 
 
-def test_simple_http() raises:
+fn test_simple_http() raises:
     var url = parse_url("http://example.com")
     assert_str_eq(url.scheme, "http", "scheme")
     assert_str_eq(url.host, "example.com", "host")
@@ -39,7 +39,7 @@ def test_simple_http() raises:
     assert_str_eq(url.request_path(), "/", "request_path")
 
 
-def test_http_with_path() raises:
+fn test_http_with_path() raises:
     var url = parse_url("http://example.com/api/data")
     assert_str_eq(url.scheme, "http", "scheme")
     assert_str_eq(url.host, "example.com", "host")
@@ -49,7 +49,7 @@ def test_http_with_path() raises:
     assert_str_eq(url.request_path(), "/api/data", "request_path")
 
 
-def test_http_with_query() raises:
+fn test_http_with_query() raises:
     var url = parse_url("http://example.com/search?q=mojo&lang=en")
     assert_str_eq(url.scheme, "http", "scheme")
     assert_str_eq(url.host, "example.com", "host")
@@ -58,14 +58,14 @@ def test_http_with_query() raises:
     assert_str_eq(url.request_path(), "/search?q=mojo&lang=en", "request_path")
 
 
-def test_custom_port() raises:
+fn test_custom_port() raises:
     var url = parse_url("http://example.com:8080/api")
     assert_str_eq(url.host, "example.com", "host")
     assert_int_eq(url.port, 8080, "port")
     assert_str_eq(url.path, "/api", "path")
 
 
-def test_https_default_port() raises:
+fn test_https_default_port() raises:
     var url = parse_url("https://example.com/secure")
     assert_str_eq(url.scheme, "https", "scheme")
     assert_str_eq(url.host, "example.com", "host")
@@ -73,40 +73,40 @@ def test_https_default_port() raises:
     assert_str_eq(url.path, "/secure", "path")
 
 
-def test_https_custom_port() raises:
+fn test_https_custom_port() raises:
     var url = parse_url("https://example.com:8443/secure")
     assert_str_eq(url.scheme, "https", "scheme")
     assert_int_eq(url.port, 8443, "port")
 
 
-def test_trailing_slash() raises:
+fn test_trailing_slash() raises:
     var url = parse_url("http://example.com/")
     assert_str_eq(url.path, "/", "path")
 
 
-def test_query_no_path() raises:
+fn test_query_no_path() raises:
     var url = parse_url("http://example.com?key=value")
     assert_str_eq(url.path, "/", "path")
     assert_str_eq(url.query, "key=value", "query")
 
 
-def test_host_header_standard_port() raises:
+fn test_host_header_standard_port() raises:
     var url = parse_url("http://example.com/path")
     assert_str_eq(url.host_header(), "example.com", "host_header standard")
 
 
-def test_host_header_custom_port() raises:
+fn test_host_header_custom_port() raises:
     var url = parse_url("http://example.com:9090/path")
     assert_str_eq(url.host_header(), "example.com:9090", "host_header custom")
 
 
-def test_raw_preserved() raises:
+fn test_raw_preserved() raises:
     var raw = "http://example.com:8080/api?q=1"
     var url = parse_url(raw)
     assert_str_eq(url.raw, raw, "raw")
 
 
-def test_missing_scheme_raises() raises:
+fn test_missing_scheme_raises() raises:
     var raised = False
     try:
         _ = parse_url("example.com/path")
@@ -116,7 +116,7 @@ def test_missing_scheme_raises() raises:
         raise Error("expected error for missing scheme")
 
 
-def test_unsupported_scheme_raises() raises:
+fn test_unsupported_scheme_raises() raises:
     var raised = False
     try:
         _ = parse_url("ftp://example.com/file")
@@ -126,13 +126,13 @@ def test_unsupported_scheme_raises() raises:
         raise Error("expected error for unsupported scheme")
 
 
-def test_deep_path() raises:
+fn test_deep_path() raises:
     var url = parse_url("http://api.example.com/v1/users/123/posts")
     assert_str_eq(url.host, "api.example.com", "host")
     assert_str_eq(url.path, "/v1/users/123/posts", "path")
 
 
-def test_ip_host() raises:
+fn test_ip_host() raises:
     var url = parse_url("http://127.0.0.1:3000/health")
     assert_str_eq(url.host, "127.0.0.1", "host")
     assert_int_eq(url.port, 3000, "port")
@@ -144,7 +144,7 @@ def test_ip_host() raises:
 # ============================================================================
 
 
-def test_port_zero_rejected() raises:
+fn test_port_zero_rejected() raises:
     """Port 0 should be rejected."""
     var raised = False
     try:
@@ -155,7 +155,7 @@ def test_port_zero_rejected() raises:
         raise Error("expected error for port 0")
 
 
-def test_port_too_large_rejected() raises:
+fn test_port_too_large_rejected() raises:
     """Port > 65535 should be rejected."""
     var raised = False
     try:
@@ -166,7 +166,7 @@ def test_port_too_large_rejected() raises:
         raise Error("expected error for port 99999")
 
 
-def test_port_overflow_rejected() raises:
+fn test_port_overflow_rejected() raises:
     """Very large port number should be rejected (overflow prevention)."""
     var raised = False
     try:
@@ -177,7 +177,7 @@ def test_port_overflow_rejected() raises:
         raise Error("expected error for overflowing port")
 
 
-def test_host_with_space_rejected() raises:
+fn test_host_with_space_rejected() raises:
     """Hostname with space should be rejected."""
     var raised = False
     try:
@@ -193,7 +193,7 @@ def test_host_with_space_rejected() raises:
 # ============================================================================
 
 
-def test_ws_scheme() raises:
+fn test_ws_scheme() raises:
     """WebSocket ws:// should parse with port 80 default."""
     var url = parse_url("ws://echo.example.com/ws")
     assert_str_eq(url.scheme, "ws", "scheme")
@@ -202,7 +202,7 @@ def test_ws_scheme() raises:
     assert_str_eq(url.path, "/ws", "path")
 
 
-def test_wss_scheme() raises:
+fn test_wss_scheme() raises:
     """Secure WebSocket wss:// should parse with port 443 default."""
     var url = parse_url("wss://echo.example.com/ws")
     assert_str_eq(url.scheme, "wss", "scheme")
@@ -211,7 +211,7 @@ def test_wss_scheme() raises:
     assert_str_eq(url.path, "/ws", "path")
 
 
-def test_ws_custom_port() raises:
+fn test_ws_custom_port() raises:
     """WebSocket ws:// with custom port."""
     var url = parse_url("ws://localhost:8080/chat")
     assert_str_eq(url.scheme, "ws", "scheme")
@@ -221,7 +221,7 @@ def test_ws_custom_port() raises:
     assert_str_eq(url.host_header(), "localhost:8080", "host_header")
 
 
-def test_wss_standard_port_host_header() raises:
+fn test_wss_standard_port_host_header() raises:
     """Secure WebSocket on port 443 should not include port in host header."""
     var url = parse_url("wss://echo.example.com/ws")
     assert_str_eq(url.host_header(), "echo.example.com", "host_header")
@@ -240,7 +240,7 @@ def main() raises:
         name: String,
         mut passed: Int,
         mut failed: Int,
-        test_fn: def () raises -> None,
+        test_fn: fn () raises -> None,
     ):
         try:
             test_fn()
