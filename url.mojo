@@ -56,7 +56,7 @@ struct Url(Copyable, Movable):
             /path?q=1      -> "/path?q=1"
             /              -> "/"
         """
-        if len(self.query) > 0:
+        if self.query.byte_length() > 0:
             return self.path + "?" + self.query
         return self.path
 
@@ -141,7 +141,7 @@ def _validate_host(host: String) raises:
     injection attacks or protocol confusion.
     """
     var bytes = host.as_bytes()
-    for i in range(len(host)):
+    for i in range(host.byte_length()):
         var b = bytes[i]
         if b == 0 or b == 13 or b == 10 or b == 32 or b == 47:
             # \0, \r, \n, space, /
@@ -170,7 +170,7 @@ def parse_url(raw_url: String) raises -> Url:
     # Convert to pointer once
     var raw_copy = raw_url
     var ptr = raw_copy.as_c_string_slice().unsafe_ptr().bitcast[UInt8]()
-    var raw_len = len(raw_url)
+    var raw_len = raw_url.byte_length()
 
     # Step 1: Find "://" to extract scheme
     var scheme_end = _find_scheme_sep(ptr, raw_len)
@@ -217,7 +217,7 @@ def parse_url(raw_url: String) raises -> Url:
         else:
             url.port = 80
 
-    if len(url.host) == 0:
+    if url.host.byte_length() == 0:
         raise Error("invalid URL: empty host")
 
     # Validate host: no null bytes, CR, LF, or spaces
@@ -236,7 +236,7 @@ def parse_url(raw_url: String) raises -> Url:
         url.path = String("/")
 
     # Default empty path to "/"
-    if len(url.path) == 0:
+    if url.path.byte_length() == 0:
         url.path = String("/")
 
     return url^
