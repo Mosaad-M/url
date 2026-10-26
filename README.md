@@ -24,7 +24,7 @@ print(u.query)   # "key=val"
 
 ## Requirements
 
-- Mojo `>=0.26.1`
+- Mojo `>=1.2.0` (for Mojo 1.0 / 1.1, use url 1.1.0)
 - No external packages
 
 ## Testing
